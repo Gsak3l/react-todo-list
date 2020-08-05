@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+
 export class AddTodo extends Component {
     state = {
         title: ''
@@ -12,7 +13,7 @@ export class AddTodo extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         this.props.addTodo(this.state.title);
-        this.setState({title: ''});
+        this.setState({ title: '' });
     }
 
     render() {
@@ -20,7 +21,7 @@ export class AddTodo extends Component {
             <div>
                 <form style={{ display: 'flex' }} onSubmit={this.onSubmit}>
                     <input type="text" name="title" placeholder="Add Todo ..." style={{ flex: '10' }}
-                        value={this.state.value} onChange={this.onChange}></input>
+                        value={this.state.title} onChange={this.onChange} id="todoTask"></input>
                     <input type="submit" value="Submit" className="btn" style={{ flex: '1' }}></input>
                 </form>
 
