@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import './App.css';
+
 import Header from './components/layout/Header';
 import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import About from './components/pages/About'
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+
+import './App.css';
 
 class App extends Component {
 
   state = {
     todos: [],
+  }
+
+  componentDidMount() {
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+      .then(res => this.setState({ todos: res.data }))
   }
 
   // Toggle Complete the Item
@@ -28,17 +36,17 @@ class App extends Component {
   // Delete an Item
   delTodo = (id) => {
     // ... = Spreat Operator, todo => todo.id !== id / This Means that we are Filtering the Todo with the Given id
-    this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id)] });
+    axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(res => this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id)] }));
+
   }
 
   // Add Todo Item
   addTodo = (title) => {
-    const newTodo = {
-      id: uuidv4(),
+    axios.post('https://jsonplaceholder.typicode.com/todos', {
       title,
       completed: false
-    };
-    this.setState({ todos: [...this.state.todos, newTodo] });
+    }).then(res => this.setState({ todos: [...this.state.todos, res.data] }))
   };
 
   render() {
@@ -54,7 +62,7 @@ class App extends Component {
                   delTodo={this.delTodo} />
               </React.Fragment>
             )} />
-            <Route path="/about" component={About}/>
+            <Route path="/about" component={About} />
           </div>
         </div>
       </Router>
